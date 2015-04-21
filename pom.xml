@@ -14,9 +14,9 @@
     </parent>
 	
 	<modules>
-		<module>log4jdbc-log4j2-jdbc4.1</module>
+<!--		<module>log4jdbc-log4j2-jdbc4.1</module>-->
 		<module>log4jdbc-log4j2-jdbc4</module>
-        <module>log4jdbc-log4j2-jdbc3</module>
+<!--        <module>log4jdbc-log4j2-jdbc3</module>-->
 	</modules>
 	
 	<url>http://code.google.com/p/log4jdbc-log4j2/</url>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="log4jdbc-log4j2-jdbc4-1.16.jar ">
+    <output-path>$PROJECT_DIR$/../</output-path>
+    <root id="archive" name="log4jdbc-log4j2-jdbc4-1.16.jar .jar">
+      <element id="module-output" name="log4jdbc-log4j2-jdbc4" />
+    </root>
+  </artifact>
+</component>

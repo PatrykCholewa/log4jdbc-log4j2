@@ -41,6 +41,7 @@ import java.util.List;
 
 import net.sf.log4jdbc.log.SpyLogDelegator;
 import net.sf.log4jdbc.sql.Spy;
+import net.sf.log4jdbc.sql.SpyConnectionCustomizer;
 import net.sf.log4jdbc.sql.rdbmsspecifics.RdbmsSpecifics;
 
 /**
@@ -438,15 +439,19 @@ public class PreparedStatementSpy extends StatementSpy implements PreparedStatem
     String dumpedSql = dumpedSql();
     reportSql(dumpedSql, methodCall);
     long tstart = System.currentTimeMillis();
-    try
-    {
+    try {
+      SpyConnectionCustomizer.getInstance().firePreExecute(tstart,dumpedSql,methodCall,realPreparedStatement.getConnection());
       boolean result = realPreparedStatement.execute();
-      reportSqlTiming(System.currentTimeMillis() - tstart, dumpedSql, methodCall);
+      long duration = System.currentTimeMillis() - tstart;
+      SpyConnectionCustomizer.getInstance().firePostExecute(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      reportSqlTiming(duration, dumpedSql, methodCall);
       return reportReturn(methodCall, result);
     }
     catch (SQLException s)
     {
-      reportException(methodCall, s, dumpedSql, System.currentTimeMillis() - tstart);
+      long duration = System.currentTimeMillis() - tstart;
+      SpyConnectionCustomizer.getInstance().fireOnException(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      reportException(methodCall, s, dumpedSql, duration);
       throw s;
     }
   }
@@ -777,14 +782,19 @@ public class PreparedStatementSpy extends StatementSpy implements PreparedStatem
     long tstart = System.currentTimeMillis();
     try
     {
+      SpyConnectionCustomizer.getInstance().firePreExecute(tstart,dumpedSql,methodCall,realPreparedStatement.getConnection());
       ResultSet r = realPreparedStatement.executeQuery();
-      reportSqlTiming(System.currentTimeMillis() - tstart, dumpedSql, methodCall);
+      long duration = System.currentTimeMillis() - tstart;
+      SpyConnectionCustomizer.getInstance().firePostExecute(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      reportSqlTiming(duration, dumpedSql, methodCall);
       ResultSetSpy rsp = new ResultSetSpy(this, r, this.log);
       return (ResultSet) reportReturn(methodCall, rsp);
     }
     catch (SQLException s)
     {
-      reportException(methodCall, s, dumpedSql, System.currentTimeMillis() - tstart);
+      long duration = System.currentTimeMillis() - tstart;
+      SpyConnectionCustomizer.getInstance().fireOnException(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      reportException(methodCall, s, dumpedSql, duration);
       throw s;
     }
   }
@@ -1077,13 +1087,18 @@ public class PreparedStatementSpy extends StatementSpy implements PreparedStatem
     long tstart = System.currentTimeMillis();
     try
     {
+      SpyConnectionCustomizer.getInstance().firePreExecute(tstart,dumpedSql,methodCall,realPreparedStatement.getConnection());
       int result = realPreparedStatement.executeUpdate();
-      reportSqlTiming(System.currentTimeMillis() - tstart, dumpedSql, methodCall);
+      long duration = System.currentTimeMillis() - tstart;
+      SpyConnectionCustomizer.getInstance().firePostExecute(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      reportSqlTiming(duration, dumpedSql, methodCall);
       return reportReturn(methodCall, result);
     }
     catch (SQLException s)
     {
-      reportException(methodCall, s, dumpedSql, System.currentTimeMillis() - tstart);
+      long duration = System.currentTimeMillis() - tstart;
+      SpyConnectionCustomizer.getInstance().fireOnException(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      reportException(methodCall, s, dumpedSql, duration);
       throw s;
     }
   }
