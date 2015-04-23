@@ -41,7 +41,7 @@ import java.util.List;
 
 import net.sf.log4jdbc.log.SpyLogDelegator;
 import net.sf.log4jdbc.sql.Spy;
-import net.sf.log4jdbc.sql.SpyConnectionCustomizer;
+import net.sf.log4jdbc.sql.SpyConnectionCustomizerRegister;
 import net.sf.log4jdbc.sql.rdbmsspecifics.RdbmsSpecifics;
 
 /**
@@ -440,17 +440,17 @@ public class PreparedStatementSpy extends StatementSpy implements PreparedStatem
     reportSql(dumpedSql, methodCall);
     long tstart = System.currentTimeMillis();
     try {
-      SpyConnectionCustomizer.getInstance().firePreExecute(tstart,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      SpyConnectionCustomizerRegister.getInstance().firePreExecute(tstart,dumpedSql,methodCall,realPreparedStatement.getConnection());
       boolean result = realPreparedStatement.execute();
       long duration = System.currentTimeMillis() - tstart;
-      SpyConnectionCustomizer.getInstance().firePostExecute(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      SpyConnectionCustomizerRegister.getInstance().firePostExecute(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
       reportSqlTiming(duration, dumpedSql, methodCall);
       return reportReturn(methodCall, result);
     }
     catch (SQLException s)
     {
       long duration = System.currentTimeMillis() - tstart;
-      SpyConnectionCustomizer.getInstance().fireOnException(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      SpyConnectionCustomizerRegister.getInstance().fireOnException(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
       reportException(methodCall, s, dumpedSql, duration);
       throw s;
     }
@@ -782,10 +782,10 @@ public class PreparedStatementSpy extends StatementSpy implements PreparedStatem
     long tstart = System.currentTimeMillis();
     try
     {
-      SpyConnectionCustomizer.getInstance().firePreExecute(tstart,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      SpyConnectionCustomizerRegister.getInstance().firePreExecute(tstart,dumpedSql,methodCall,realPreparedStatement.getConnection());
       ResultSet r = realPreparedStatement.executeQuery();
       long duration = System.currentTimeMillis() - tstart;
-      SpyConnectionCustomizer.getInstance().firePostExecute(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      SpyConnectionCustomizerRegister.getInstance().firePostExecute(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
       reportSqlTiming(duration, dumpedSql, methodCall);
       ResultSetSpy rsp = new ResultSetSpy(this, r, this.log);
       return (ResultSet) reportReturn(methodCall, rsp);
@@ -793,7 +793,7 @@ public class PreparedStatementSpy extends StatementSpy implements PreparedStatem
     catch (SQLException s)
     {
       long duration = System.currentTimeMillis() - tstart;
-      SpyConnectionCustomizer.getInstance().fireOnException(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      SpyConnectionCustomizerRegister.getInstance().fireOnException(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
       reportException(methodCall, s, dumpedSql, duration);
       throw s;
     }
@@ -1087,17 +1087,17 @@ public class PreparedStatementSpy extends StatementSpy implements PreparedStatem
     long tstart = System.currentTimeMillis();
     try
     {
-      SpyConnectionCustomizer.getInstance().firePreExecute(tstart,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      SpyConnectionCustomizerRegister.getInstance().firePreExecute(tstart,dumpedSql,methodCall,realPreparedStatement.getConnection());
       int result = realPreparedStatement.executeUpdate();
       long duration = System.currentTimeMillis() - tstart;
-      SpyConnectionCustomizer.getInstance().firePostExecute(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      SpyConnectionCustomizerRegister.getInstance().firePostExecute(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
       reportSqlTiming(duration, dumpedSql, methodCall);
       return reportReturn(methodCall, result);
     }
     catch (SQLException s)
     {
       long duration = System.currentTimeMillis() - tstart;
-      SpyConnectionCustomizer.getInstance().fireOnException(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
+      SpyConnectionCustomizerRegister.getInstance().fireOnException(duration,dumpedSql,methodCall,realPreparedStatement.getConnection());
       reportException(methodCall, s, dumpedSql, duration);
       throw s;
     }
